@@ -6,6 +6,12 @@ app.get('/home', (req, res) => {
   res.status(200).json('Welcome, your app is working well');
 });
 
+
+app.get('/age' , (req , res) => {
+    res.status(200).json('you are api working fine')
+} )
+
+
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
