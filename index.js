@@ -4,6 +4,7 @@ const cors = require('cors');
 const { MongoClient } = require('mongodb');
 const router = express.Router()
 const userRoutes = require('./user')
+const ordered_itemsRoutes = require('./order_items') 
 const app = express();
 
 
@@ -12,7 +13,7 @@ app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use( '/user' , userRoutes)
-
+app.use('./ordered_items' , ordered_itemsRoutes)
 //custom middle ware
 const timeLog = (req, res, next) => {
   console.log('Time: ', Date.now())
@@ -32,7 +33,6 @@ db.once('open', () => {
 });
 
 const DataSchema = new mongoose.Schema({
-  // Define your schema based on the collection
   name : String , 
   price : Number , 
   url : String , 
