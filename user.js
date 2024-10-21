@@ -21,9 +21,11 @@ const DataSchema = new mongoose.Schema({
   
 const user = mongoose.model('users', DataSchema);
 
-router.get('/' ,async (req , res) => {
+router.get('/:userName' ,async (req , res) => {
     try {
-        const data = await user.find();
+        const { userName, password } = req.params;
+        const data = await user.find({ name : userName });
+        console.log(userName)
         res.json(data);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching data' });
