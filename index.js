@@ -7,7 +7,6 @@ const userRoutes = require('./user')
 const ordered_itemsRoutes = require('./order_items') 
 const app = express();
 
-
 //middle ware 
 app.use(cors())
 app.use(express.json())
