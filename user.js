@@ -1,6 +1,10 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
+
 const mongoose = require('mongoose');
+const app = express()
+const helmet = require('helmet');
+
 
 mongoose.connect('mongodb+srv://rudrsharma103:rudrdb@victara-cluster.outgk.mongodb.net/victara-user', {
     useNewUrlParser: true,
@@ -8,46 +12,50 @@ mongoose.connect('mongodb+srv://rudrsharma103:rudrdb@victara-cluster.outgk.mongo
 });
 
 const db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
+db.on('error', console.error.bind(console , 'connection error:'));
 db.once('open', () => {
   console.log('Connected to MongoDB');
 });
-  
+
+// Define your schema
 const DataSchema = new mongoose.Schema({
-  // Define your schema based on the collection
-  userName : String , 
-  password : Number
+  userName: String,
+  password: Number
 });
-  
-const user = mongoose.model('users', DataSchema);
 
-router.get('/:userName' , async (req , res) => {
-    try {
-        const { userName, password } = req.params;
-        const data = await user.find({ name : userName });
-        console.log(userName)
-        res.json(data);
-    } catch (error) {
-        res.status(500).json({ message: 'Error fetching data' });
-    }
-})
+const User = mongoose.model('users', DataSchema);
 
+// GET user by userName
+router.get('/:userName', async (req, res) => {
+  try {
+      const { userName } = req.params;
+      const data = await User.findOne({ userName }); // Fixed field matching
+      if (data) {
+          res.json(data);
+      } else {
+          res.status(404).json({ message: 'User not found' });
+      }
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching data' });
+  }
+});
+
+// POST to create a new user
 router.post('/', async (req, res) => {
     try {
-      const { userName , password } = req.body;
-  
-      const result = await user.create({
-        userName : userName , 
-        password : password
-      });
-      // access result._id 
-      console.log(result._id);
-      // Send back the ID of the newly created user
-      res.send('thankyou your data has been added to db')
-    } catch (error) {
-      console.error("Error creating user:", error);
-      return res.status(500).json({ msg: 'Error creating user', error: error.message });
-    }
-})
+        const { userName, password } = req.body;
 
-module.exports = router
+        const result = await User.create({
+            userName: userName,
+            password: password
+        });
+
+        console.log(result._id);
+        // Send back the ID of the newly created user
+        res.status(201).json({ message: 'User created', userId: result._id });
+    } catch (error) {
+        console.error("Error creating user:", error);
+        res.status(500).json({ msg: 'Error creating user', error: error.message });
+    }
+});
+module.exports = router;
