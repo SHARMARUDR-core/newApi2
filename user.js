@@ -6,7 +6,7 @@ mongoose.connect('mongodb+srv://rudrsharma103:rudrdb@victara-cluster.outgk.mongo
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
-  
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
