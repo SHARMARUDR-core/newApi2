@@ -11,6 +11,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.1",
-    "mongoose": "^8.7.2"
+    "mongoose": "^8.7.2",
+    "vercel": "^37.11.0"
   }
 }
