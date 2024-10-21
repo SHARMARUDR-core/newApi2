@@ -2,11 +2,22 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const { MongoClient } = require('mongodb');
-
+const router = express.Router()
+const userRoutes = require('./user')
 const app = express();
+app.use( '/user' , userRoutes)
+
+//middle ware 
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+
+//custom middle ware
+const timeLog = (req, res, next) => {
+  console.log('Time: ', Date.now())
+  next()
+}
+router.use(timeLog)
 
 mongoose.connect('mongodb+srv://rudrsharma103:rudrdb@victara-cluster.outgk.mongodb.net/victara-user', {
   useNewUrlParser: true,
